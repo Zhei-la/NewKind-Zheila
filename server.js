@@ -9,6 +9,7 @@
 const express = require('express');
 const cors = require('cors');
 const crypto = require('crypto');
+const path = require('path');
 const app = express();
 
 // ============================================================
@@ -32,7 +33,10 @@ app.use(express.json());
 // 📁 정적 파일 서빙 (HTML, CSS, 이미지 등)
 // ============================================================
 // server.js와 같은 폴더의 HTML 파일들을 자동으로 제공
-app.use(express.static(__dirname));
+// '/' 는 공개 랜딩, 자료집은 '/guide' (기존 '/index.html' 링크도 그대로 열림)
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'landing.html')));
+app.get('/guide', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.use(express.static(__dirname, { index: false }));
 
 // ============================================================
 // 2️⃣ 토큰 생성 함수 (간단한 방식)
